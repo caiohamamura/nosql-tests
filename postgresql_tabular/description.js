@@ -118,7 +118,7 @@ module.exports = {
   getCollection: function (db, name, cb) {
     cb(null, normalizeName(name));
   },
-
+i
   dropCollection: function (db, name, cb) {
     name = normalizeName(name);
 
@@ -196,7 +196,7 @@ module.exports = {
   },
 
   neighbors2data: function (db, tableP, tableR, id, i, cb) {
-    db.query("select p.* from (select distinct a._to from (select _to from relations where _from = $1 union all select r2._to from relations r1 JOIN relations r2 ON r1._to = r2._from AND r1._from <> r2._to where r1._from=$1) a) b join profiles p on a._to = p.id;))", [id])
+    db.query("select p.* from (select distinct a._to from (select _to from relations where _from = $1 union all select r2._to from relations r1 JOIN relations r2 ON r1._to = r2._from AND r1._from <> r2._to where r1._from=$1) a) b join profiles p on b._to = p.id;))", [id])
      .then(function (result) {
        cb(null, result.length);
      })
