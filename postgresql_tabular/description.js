@@ -202,5 +202,19 @@ i
      })
      .catch(function (err) {cb(err);});
   },
+  
+  shortestPath: function (db, collP, collR, path, i, cb) {
+    db.query('WITH RECURSIVE tree_relations (_from, _to, places_chain) AS ('
+            +'SELECT _from, _to, ARRAY[_from, _to] FROM relations WHERE _from = $1'
+            +'UNION ALL'
+            +'SELECT r._from, r._to, t.places_chain || r._to FROM relations r JOIN tree_relations t ON r._from = t._to'
+            +'WHERE NOT (t.places_chain @> ARRAY[r._to])'
+            +')'
+            +'SELECT * FROM tree_relations WHERE _to = $2 LIMIT 1', [path.from, path.to])
+      .then(function (result) {
+        cb(null, result.length);
+      })
+      .catch(function (err) {cb(err);});
+  },
 };
   
